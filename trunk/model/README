@@ -1,0 +1,7 @@
+Compile execute.c and run  './a.out 2k-table > data'
+The data with default values will be at the end of file.
+
+
+Obs.:
+@rapha, 5 of 7 parameters are float!
+the call of simulation is './simulation <file> <int> <int> <float> <float> <float> <float> <float>' line 18

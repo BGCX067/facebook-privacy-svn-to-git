@@ -1,0 +1,80 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+ A little man for each function used on the simulation
+
+== Functions == 
+
+=== General ===
+          * We need to define our abstract representation of what a OSN user is, here is what I think it is necessary:
+                ** friendship - Array of int to represent each person who is his friend (This shouldn't be an static size array, it needs to be dynamically allocated for memory saving)
+                ** read         - Bit to indicate if he have read the msg ( Note that  read and share aren't the same thing, the spread will reach everyone who read the mensage not only those who shared it) 
+                ** shared      - Bit to indicate if he had shared the msg  (We will assume that if this bit is on then everyone who visit his profile will be able to read the msg)
+                ** privacy     - Short int to indicate which level of privacy settings he have 
+                ** news        - int to indicate how many unread msgs from the spread are "posted" at his news feed
+          * The graph representation:
+                ** It would be easy represented as an array of  OSN users ( againt, it shoud be dynamically allocated regarding the  number of users our simulation will have)
+                ** Note that an array would fit like a glove to our purpose because our users will be identified by an unique incremental ID that should allow us to access his data with O(1).
+                ** The only problem is that we need to pre-process the data to fit our input standards 
+          * Input Standard:
+                ** CSV file with the first line containing the Number of users. Each other line will be like: <short int to indicate the level of privacy settings>,<list of friends unique IDs separated by space>
+          * Simuation arguments:
+                ** File that have all user's data
+                ** Number of Days that it will be simulated
+
+=== Functions regarding the simulation itself ===
+          * Usage()
+                ** Goal: Shows how the simulator must be started, which arguments those it take to run properly
+                ** Return: None
+          * error(< string > *_Error msg_*)
+                ** Goal:  Print the erro mensage on the screen and finish the simulation
+                ** Return: None
+          * buildGraph(< graph > *_array of the OSN users*_, < FILE > *_File descriptor of the data file*_)
+                ** Goal: Read the user's data form a file and save it at memory (< graph >) . Remember to start each user's remaining variable as 0 
+                ** Return: None
+          * initialSpread(< graph > _*array of the OSN users*_ , < string > *_List of IDs_* )
+                ** Goal: Start the spread effect and be able to select multiple start "points". Rise the read and share bit of each initial user and send a msg for each friend of each initial user.
+                ** Return: None
+          * reaches(< graph > *_array of the OSN users*_ , < int > _*User id *_)
+                ** Goal: Verify if the specific user has already be reached by the spread and if he isn't mark his "read" bit as 1 and increment the global variable that tracks how many users have been reached
+                ** Return: None
+          * sendNews(< graph > *_array of the OSN users*_ ,< int > *_User id*_ )
+                ** Goal: Send a msg for each of the specific user's friend by incrementing the integer "news".
+                ** Return: None
+          * status(< graph > *_array of the OSN users*_, < int > *_Number of users in the OSN*_)
+                ** Goal: Shows which % of the graph has been reached by the msg until now
+                ** Return: None
+          * logginProbability()
+                ** Goal: Probabilistic model for loggin in the OSN
+                ** return: 0 if the user wont or 1 otherwise
+          * readProbability()
+                ** Goal: Probabilistic model for read msgs in the OSN
+                ** return: 0 if the user wont read or 1 otherwise
+          
+          * shareProbability()
+                ** Goal: Probabilistic model for the act of share in the OSN
+                ** return: 0 if the user wont share or 1 otherwise
+          * browseProbability()
+                ** Goal: Probabilistic model to let a user keep viewing other user's profiles in the OSN
+                ** return: 0 if the user wont keep browsing or 1 otherwise
+          * simulation(< graph > *_array of the OSN users*_,< int > *_Number of users in the OSN*_, < int > *_Number of days that will be simulated*_)
+                ** Goal: iterate X times, where X is the number of days, in the array. For each slot, call the logginProbability() and if it returns "ok" execute the behavior() function
+                ** return: none
+
+
+== Functions regarding the user's behavior === 
+          * Share(< graph > *_array of the OSN users*_,< int > *_user id*_)
+                ** Goal: Check if the specific user already shares the msg and if he does not mark his "share" integer as 1
+                ** Return: None
+          * checkProfile(< graph > *_array of the OSN users*_,< int > *_user ID*_)
+                ** Goal: Gather information of an specific user. Like if he is sharing the msg and who are his friends. Here is where the privacy settigns should be checked
+                ** Return: 1 if he is sharing the msg and 0 otherwise
+          * randomFriend(< graph > *_array of the OSN users*_, < int > *_user ID*_)
+                ** Goal: Use some kind of algorithim (maybe random to start) to select one friend profile among all user's friends
+                ** Return: An integer representing the next profile to view
+          * behavior(< graph > _*array of the OSN users*_, < int > *_User id*_)
+                ** Goal: Simulate the user's behavior according the flowchart. 
+                      ** First see if there is any new msg by checking if the "news" integer is greater then 0, if it is so, start  the NewsFeedLoop (Attached).
+                      ** Secondly, call the browsingLoop behavior( Also Attached)
+                ** Return: None
